@@ -8,60 +8,38 @@ namespace ProblemShare.Tests.Business
     [TestClass]
     public class DocumentBOTest
     {
-        DocumentBO _docBO;
-        DocumentViewModel _doc;
-        Guid _institutionId;
+        const string ORIGINL_NAME = "My Test Document";
+        const string NEW_NAME = "My Test Document Updated";
 
-        [TestInitialize]
-        public void Init()
-        {
-            _docBO = new DocumentBO();
-            _doc = new DocumentViewModel() { Name = "TestDocument" };
-            _institutionId = Guid.NewGuid();
-        }
-
-        [TestCleanup]
-        public void cleanup()
-        {
-            _doc = null;
-            _docBO = null;
-        }
 
         [TestMethod]
-        public void Add()
+        public void Document_BO_Test1()
         {
-            _doc.Id = _docBO.Save(_doc, _institutionId);
+            DocumentBO _docBO = new DocumentBO();
+            Guid iId = new Guid("e4ca836a-14dd-4620-bf0b-91ba89450f96");
 
-            Assert.IsNotNull(_doc.Id);
-            Assert.IsFalse(_doc.Id == Guid.Empty);
-        }
+            DocumentViewModel vmItem = new DocumentViewModel()
+            {
+                Name = ORIGINL_NAME
+            };
 
-        [TestMethod]
-        public void Save()
-        {
-            _doc.Name = "RenamedTestDocument";
+            Guid vmItemId = _docBO.Add(vmItem, iId);
 
-            Guid resId = _docBO.Save(_doc, _institutionId);
+            Assert.IsNotNull(vmItemId);
+            Assert.AreNotEqual(Guid.Empty, vmItemId);
 
-            Assert.AreEqual(_doc.Id, resId);
-        }
+            vmItem.Id = vmItemId;
+            vmItem.Name = NEW_NAME;
 
-        [TestMethod]
-        public void Load()
-        {
-            DocumentViewModel _doc2;
+            bool result = _docBO.Save(vmItem, iId);
 
-            _doc2 = _docBO.Load(_doc.Id);
+            Assert.IsTrue(result);
 
-            Assert.AreEqual(_doc, _doc2);
-        }
+            string newName = _docBO.Get(vmItemId, iId).Name;
 
-        [TestMethod]
-        public void Delete()
-        {
-            bool result;
+            Assert.AreEqual(NEW_NAME, newName);
 
-            result = _docBO.Delete(_doc.Id, _institutionId);
+            result = _docBO.Delete(vmItemId, iId);
 
             Assert.IsTrue(result);
         }
