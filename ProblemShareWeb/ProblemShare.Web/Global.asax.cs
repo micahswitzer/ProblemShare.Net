@@ -17,5 +17,11 @@ namespace ProblemShare.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        //protected void Session_Start(object sender, EventArgs e)
+        //{
+        //    // Possible do something with session state in the future
+        //    // HttpContext.Current.Session.Add("__StateObject", );
+        //}
     }
 }

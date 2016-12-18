@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProblemShare.Web.Models
+using System.Web.Mvc;
+
+namespace ProblemShare.Web.Extentions
 {
-    public class InstitutionViewModel
+    public static class MvcHelpers
     {
+        
     }
 }

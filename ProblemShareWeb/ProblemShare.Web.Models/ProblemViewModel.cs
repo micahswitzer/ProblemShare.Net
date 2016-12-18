@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProblemShare.Web.Models
 {
-    public class InstitutionViewModel
+    public class ProblemViewModel
     {
+        public Guid Id { get; set; }
+        public int Number { get; set; }
+        public string Content { get; set; }
     }
 }

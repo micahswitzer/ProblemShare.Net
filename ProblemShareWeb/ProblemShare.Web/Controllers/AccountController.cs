@@ -175,7 +175,7 @@ namespace ProblemShare.Web.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
             if (userId == null || code == null)
             {
@@ -288,7 +288,7 @@ namespace ProblemShare.Web.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId == default(Guid))
             {
                 return View("Error");
             }

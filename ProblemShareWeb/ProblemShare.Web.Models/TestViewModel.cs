@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ProblemShare.Web.Models
 {
-    public class InstitutionViewModel
+    public class TestViewModel : DocumentViewModel
     {
+        public List<ProblemViewModel> Problems { get; set; }
     }
 }

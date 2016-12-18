@@ -9,10 +9,10 @@ namespace ProblemShare.Web.Interface
     /// <typeparam name="ViewModelType">The view model type associated with the particuar business object</typeparam>
     public interface IBusinessObject<ViewModelType>
     {
-        Guid Add(ViewModelType item, Guid institutionId);
+        void Add(ViewModelType item, Guid institutionId);
         bool Save(ViewModelType item, Guid institutionId);
         ViewModelType Get(Guid id, Guid institutionId);
-        List<ViewModelType> GetAll(Guid institutionId);
+        ICollection<ViewModelType> GetAll(Guid institutionId);
         bool Delete(Guid id, Guid institutionId);
     }
 }

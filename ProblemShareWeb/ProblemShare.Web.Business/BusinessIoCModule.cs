@@ -31,12 +31,14 @@ namespace ProblemShare.Web.Business
         {
             _kernel = kernel;
             _kernel.Bind<IDocumentBO>().To(typeof(DocumentBO));
+            _kernel.Bind<IProblemBO>().To(typeof(ProblemBO));
         }
 
         public void OnUnload(IKernel kernel)
         {
             _kernel = kernel;
             _kernel.Unbind<IDocumentBO>();
+            _kernel.Unbind<IProblemBO>();
             _kernel = null;
         }
 

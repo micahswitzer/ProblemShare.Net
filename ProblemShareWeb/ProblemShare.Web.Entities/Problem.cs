@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace ProblemShare.Web.Entities
 {
-    public class Institution
+    public class Problem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid InstitutionId { get; set; }
-        public string Name { get; set; }
-        public ICollection<Document> Documents { get; set; }
-        public ICollection<User> Users { get; set; }
+        public Guid ProblemId { get; set; }
+        public Guid DocumentId { get; set; }
+        [ForeignKey("DocumentId")]
+        public virtual Test Test { get; set; }
+        public int Number { get; set; }
+        public string Body { get; set; }
     }
 }

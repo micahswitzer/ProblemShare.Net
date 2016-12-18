@@ -3,13 +3,14 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 namespace ProblemShare.Web.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<Guid, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, Guid> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -18,16 +19,41 @@ namespace ProblemShare.Web.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, CustomRole,
+        Guid, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("DefaultConnection")
         {
         }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+    }
+
+    public class CustomUserRole : IdentityUserRole<Guid> { }
+    public class CustomUserClaim : IdentityUserClaim<Guid> { }
+    public class CustomUserLogin : IdentityUserLogin<Guid> { }
+    public class CustomRole : IdentityRole<Guid, CustomUserRole>
+    {
+        public CustomRole() { }
+        public CustomRole(string name) { Name = name; }
+    }
+    public class CustomUserStore : UserStore<ApplicationUser, CustomRole, Guid,
+        CustomUserLogin, CustomUserRole, CustomUserClaim>
+    {
+        public CustomUserStore(ApplicationDbContext context)
+            : base(context)
+        {
+        }
+    }
+    public class CustomRoleStore : RoleStore<CustomRole, Guid, CustomUserRole>
+    {
+        public CustomRoleStore(ApplicationDbContext context)
+            : base(context)
+        {
         }
     }
 }

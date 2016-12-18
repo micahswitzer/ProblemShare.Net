@@ -51,12 +51,60 @@
   <ItemGroup>
     <Compile Include="Document.cs" />
     <Compile Include="Institution.cs" />
+    <Compile Include="Migrations\201612071917470_Init.cs" />
+    <Compile Include="Migrations\201612071917470_Init.Designer.cs">
+      <DependentUpon>201612071917470_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612130110595_Inheritance.cs" />
+    <Compile Include="Migrations\201612130110595_Inheritance.Designer.cs">
+      <DependentUpon>201612130110595_Inheritance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612130122028_AutoId.cs" />
+    <Compile Include="Migrations\201612130122028_AutoId.Designer.cs">
+      <DependentUpon>201612130122028_AutoId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612130140024_IdentityFix.cs" />
+    <Compile Include="Migrations\201612130140024_IdentityFix.Designer.cs">
+      <DependentUpon>201612130140024_IdentityFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612132113433_DocumentsNoAbstract.cs" />
+    <Compile Include="Migrations\201612132113433_DocumentsNoAbstract.Designer.cs">
+      <DependentUpon>201612132113433_DocumentsNoAbstract.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612182239594_Users.cs" />
+    <Compile Include="Migrations\201612182239594_Users.Designer.cs">
+      <DependentUpon>201612182239594_Users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Problem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PSContext.cs" />
+    <Compile Include="Test.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201612071917470_Init.resx">
+      <DependentUpon>201612071917470_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612130110595_Inheritance.resx">
+      <DependentUpon>201612130110595_Inheritance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612130122028_AutoId.resx">
+      <DependentUpon>201612130122028_AutoId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612130140024_IdentityFix.resx">
+      <DependentUpon>201612130140024_IdentityFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612132113433_DocumentsNoAbstract.resx">
+      <DependentUpon>201612132113433_DocumentsNoAbstract.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612182239594_Users.resx">
+      <DependentUpon>201612182239594_Users.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

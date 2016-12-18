@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProblemShare.Web.Models
+namespace ProblemShare.Web.Entities
 {
-    public class InstitutionViewModel
+    public class Test : Document
     {
+        public ICollection<Problem> Problems { get; set; }
     }
 }
