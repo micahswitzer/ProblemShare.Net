@@ -58,6 +58,7 @@
     <Compile Include="InvalidModelException.cs" />
     <Compile Include="ProblemBO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserBO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProblemShare.Web.Entities\ProblemShare.Web.Entities.csproj">

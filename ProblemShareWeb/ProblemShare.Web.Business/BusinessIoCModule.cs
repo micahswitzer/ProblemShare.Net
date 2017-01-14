@@ -32,6 +32,7 @@ namespace ProblemShare.Web.Business
             _kernel = kernel;
             _kernel.Bind<IDocumentBO>().To(typeof(DocumentBO));
             _kernel.Bind<IProblemBO>().To(typeof(ProblemBO));
+            _kernel.Bind<IUserBO>().To(typeof(UserBO));
         }
 
         public void OnUnload(IKernel kernel)
@@ -39,6 +40,7 @@ namespace ProblemShare.Web.Business
             _kernel = kernel;
             _kernel.Unbind<IDocumentBO>();
             _kernel.Unbind<IProblemBO>();
+            _kernel.Unbind<IUserBO>();
             _kernel = null;
         }
 

@@ -48,6 +48,12 @@ namespace ProblemShare.Web.Models
             : base(context)
         {
         }
+
+        public override Task CreateAsync(ApplicationUser user)
+        {
+            user.Id = Guid.NewGuid();
+            return base.CreateAsync(user);
+        }
     }
     public class CustomRoleStore : RoleStore<CustomRole, Guid, CustomUserRole>
     {

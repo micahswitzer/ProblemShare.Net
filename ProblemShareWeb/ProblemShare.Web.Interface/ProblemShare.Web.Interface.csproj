@@ -46,6 +46,7 @@
     <Compile Include="IDocumentBO.cs" />
     <Compile Include="IProblemBO.cs" />
     <Compile Include="ITestBO.cs" />
+    <Compile Include="IUserBO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
