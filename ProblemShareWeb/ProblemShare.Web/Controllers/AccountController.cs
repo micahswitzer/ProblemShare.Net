@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ProblemShare.Web.Models;
+using ProblemShare.Web.Interface;
+using ProblemShare.Web.Extentions;
 
 namespace ProblemShare.Web.Controllers
 {
@@ -17,12 +19,14 @@ namespace ProblemShare.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IUserBO _userBO;
 
-        public AccountController()
+        public AccountController(IUserBO userBO)
         {
+            _userBO = userBO;
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -66,28 +70,33 @@ namespace ProblemShare.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<JsonResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return new AjaxResult(resultType: AjaxResultType.Failure);
             }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email,
+                model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    addSessionVars();
+                    return new AjaxResult(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return new AjaxResult(redirectUrl: Url.Action("Lockout"));
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return new AjaxResult(
+                        redirectUrl: Url.Action("SendCode"),
+                        paramData: new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return new AjaxResult(
+                        resultType: AjaxResultType.Failure,
+                        message: "Invalid login attempt.");
             }
         }
 
@@ -124,7 +133,8 @@ namespace ProblemShare.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
+                    addSessionVars();
+                    return redirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.Failure:
@@ -156,7 +166,9 @@ namespace ProblemShare.Web.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    addSessionVars();
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -165,7 +177,7 @@ namespace ProblemShare.Web.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                addErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -175,9 +187,9 @@ namespace ProblemShare.Web.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
-            if (userId == null || code == null)
+            if (userId == Guid.Empty || code == null)
             {
                 return View("Error");
             }
@@ -259,7 +271,7 @@ namespace ProblemShare.Web.Controllers
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            AddErrors(result);
+            addErrors(result);
             return View();
         }
 
@@ -288,7 +300,7 @@ namespace ProblemShare.Web.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId == default(Guid))
             {
                 return View("Error");
             }
@@ -333,7 +345,8 @@ namespace ProblemShare.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    addSessionVars();
+                    return redirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -375,14 +388,23 @@ namespace ProblemShare.Web.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        addSessionVars();
+                        return redirectToLocal(returnUrl);
                     }
                 }
-                AddErrors(result);
+                addErrors(result);
             }
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult LogOff(bool nothing = false)
+        {
+            removeSessionVars();
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
         }
 
         //
@@ -391,6 +413,7 @@ namespace ProblemShare.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            removeSessionVars();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
@@ -423,6 +446,22 @@ namespace ProblemShare.Web.Controllers
             base.Dispose(disposing);
         }
 
+        private void addSessionVars()
+        {
+            Guid? userId = null, iId = null;
+            userId = _userBO.GetUserIdForUsername(User.Identity.GetUserName());
+            if (userId != null)
+                iId = _userBO.GetInstitutionIdForUser((Guid)userId);
+            HttpContext.Session.Add("__UserId", userId);
+            HttpContext.Session.Add("__UserInstitutionId", iId);
+        }
+
+        private void removeSessionVars()
+        {
+            HttpContext.Session.Remove("__UserId");
+            HttpContext.Session.Remove("__UserInstitutionId");
+        }
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -435,7 +474,7 @@ namespace ProblemShare.Web.Controllers
             }
         }
 
-        private void AddErrors(IdentityResult result)
+        private void addErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
@@ -443,7 +482,7 @@ namespace ProblemShare.Web.Controllers
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
+        private ActionResult redirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
             {

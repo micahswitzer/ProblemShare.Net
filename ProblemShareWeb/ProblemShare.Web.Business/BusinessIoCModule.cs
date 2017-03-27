@@ -1,48 +1,45 @@
-﻿using System;
-
-using Ninject;
+﻿using Ninject;
 using Ninject.Modules;
-
+using ProblemShare.Web.Entities;
 using ProblemShare.Web.Interface;
 
 namespace ProblemShare.Web.Business
 {
     public class BusinessIoCModule : INinjectModule
     {
-        private IKernel _kernel;
+        public IKernel Kernel { get; private set; }
 
-        public IKernel Kernel
-        {
-            get
-            {
-                return _kernel;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return this.GetType().Name;
-            }
-        }
+        public string Name => this.GetType().Name;
 
         public void OnLoad(IKernel kernel)
         {
-            _kernel = kernel;
-            _kernel.Bind<IDocumentBO>().To(typeof(DocumentBO));
+            Kernel = kernel;
+            Kernel.Bind<IFileManagerBO>().To(typeof(LocalFileManagerBO));
+            Kernel.Bind<IInstitutionBO>().To(typeof(InstitutionBO));
+            Kernel.Bind<IDocumentBO>().To(typeof(DocumentBO));
+            Kernel.Bind<IProblemBO>().To(typeof(ProblemBO));
+            Kernel.Bind<IUserBO>().To(typeof(UserBO));
         }
 
         public void OnUnload(IKernel kernel)
         {
-            _kernel = kernel;
-            _kernel.Unbind<IDocumentBO>();
-            _kernel = null;
+            Kernel = kernel;
+            Kernel.Unbind<IFileManagerBO>();
+            Kernel.Unbind<IInstitutionBO>();
+            Kernel.Unbind<IDocumentBO>();
+            Kernel.Unbind<IProblemBO>();
+            Kernel.Unbind<IUserBO>();
+            Kernel = null;
         }
 
         public void OnVerifyRequiredModules()
         {
             
         }
+    }
+
+    public static class Context
+    {
+        public static PSContext Get() => new PSContext("ProblemShareDB");
     }
 }
