@@ -94,7 +94,6 @@
   <ItemGroup>
     <Compile Include="Business\DocumentBOTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -118,10 +117,6 @@
     <ProjectReference Include="..\ProblemShare.Web.Models\ProblemShare.Web.Models.csproj">
       <Project>{eae99160-b3cc-46d5-9b36-f68c02fb361b}</Project>
       <Name>ProblemShare.Web.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ProblemShare.Web\ProblemShare.Web.csproj">
-      <Project>{9E1583DD-76B8-4CE9-A3D1-14A660AA35DB}</Project>
-      <Name>ProblemShare.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
