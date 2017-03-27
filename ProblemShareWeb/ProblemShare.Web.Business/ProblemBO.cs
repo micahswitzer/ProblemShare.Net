@@ -1,22 +1,20 @@
-﻿using ProblemShare.Web.Interface;
+﻿using ProblemShare.Web.Entities;
+using ProblemShare.Web.Interface;
+using ProblemShare.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProblemShare.Web.Models;
-using ProblemShare.Web.Entities;
 
 namespace ProblemShare.Web.Business
 {
-    public class ProblemBO : IProblemBO
+    public class ProblemBO : BO, IProblemBO
     {
         public void AddToCollection(ProblemViewModel item, Guid parentId, Guid institutionId)
         {
             if (item == null) throw new InvalidModelException();
-            using (var db = new PSContext())
+            using (var db = Context)
             {
-                var dbParent = db.Tests.Where(x => x.DocumentId == parentId && x.InstitutionId == institutionId).FirstOrDefault();
+                var dbParent = db.Tests.FirstOrDefault(x => x.DocumentId == parentId && x.InstitutionId == institutionId);
                 if (dbParent == null) throw new ArgumentException("Unable to find a matching test to assign the problem to");
 
                 Problem dbItem = new Problem()
@@ -35,31 +33,29 @@ namespace ProblemShare.Web.Business
 
         public ICollection<ProblemViewModel> GetAllForParent(Guid parentId, Guid institutionId)
         {
-            using(var db = new PSContext())
+            using (var db = Context)
             {
-                var dbParent = db.Tests.Where(x => x.DocumentId == parentId && x.InstitutionId == institutionId).FirstOrDefault();
+                var dbParent = db.Tests.FirstOrDefault(x => x.DocumentId == parentId && x.InstitutionId == institutionId);
                 if (dbParent == null) throw new ArgumentException("Unable to find matching parent item in database");
 
-                return dbParent.Problems.Select(x => dbItemToViewModel(x)).ToList();
+                return dbParent.Problems.Select(dbItemToViewModel).ToList();
             }
         }
 
         public ProblemViewModel GetItem(Guid itemId, Guid institutionId)
         {
-            using (var db = new PSContext())
+            using (var db = Context)
             {
-                var dbItem = db.Problems.Where(x => x.ProblemId == itemId && x.Test.InstitutionId == institutionId).FirstOrDefault();
-                if (dbItem == null) return null;
-
-                return dbItemToViewModel(dbItem);
+                var dbItem = db.Problems.FirstOrDefault(x => x.ProblemId == itemId && x.Test.InstitutionId == institutionId);
+                return dbItem == null ? null : dbItemToViewModel(dbItem);
             }
         }
 
         public bool RemoveItem(Guid itemId, Guid institutionId)
         {
-            using (var db = new PSContext())
+            using (var db = Context)
             {
-                var dbItem = db.Problems.Where(x => x.ProblemId == itemId && x.Test.InstitutionId == institutionId).FirstOrDefault();
+                var dbItem = db.Problems.FirstOrDefault(x => x.ProblemId == itemId && x.Test.InstitutionId == institutionId);
                 if (dbItem == null) return false;
 
                 db.Problems.Remove(dbItem);
@@ -73,9 +69,9 @@ namespace ProblemShare.Web.Business
         public bool UpdateItem(ProblemViewModel item, Guid institutionId)
         {
             if (item == null) return false;
-            using (var db = new PSContext())
+            using (var db = Context)
             {
-                var dbItem = db.Problems.Where(x => x.ProblemId == item.Id && x.Test.InstitutionId == institutionId).FirstOrDefault();
+                var dbItem = db.Problems.FirstOrDefault(x => x.ProblemId == item.Id && x.Test.InstitutionId == institutionId);
                 if (dbItem == null) return false;
 
                 dbItem.Number = item.Number;
@@ -87,9 +83,9 @@ namespace ProblemShare.Web.Business
             }
         }
 
-        private ProblemViewModel dbItemToViewModel(Problem dbItem)
+        private static ProblemViewModel dbItemToViewModel(Problem dbItem)
         {
-            ProblemViewModel vmItem = new ProblemViewModel()
+            var vmItem = new ProblemViewModel()
             {
                 Id = dbItem.ProblemId,
                 Number = dbItem.Number,

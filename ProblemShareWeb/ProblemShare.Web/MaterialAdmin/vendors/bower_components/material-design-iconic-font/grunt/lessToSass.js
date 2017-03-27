@@ -1,11 +1,13 @@
 module.exports = {
     convert: {
         files: [{
-            expand: true,
-            cwd: 'less',
-            src: ['*.less'],
-            ext: '.scss',
-            dest: 'scss/temp'
-        }]
+                expand: true,
+                cwd: 'less',
+                src: ['*.less'],
+                ext: '.scss',
+                dest: 'scss/temp'
+            }]
     }
 };
+//# sourceMappingURL=lessToSass.js.map 
+//# sourceMappingURL=lessToSass.js.map

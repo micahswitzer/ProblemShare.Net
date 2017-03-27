@@ -1,8 +1,8 @@
 module.exports = {
     prod: {
         options: {
-            autoprefixer: {'browsers': ["> 1%", "last 2 versions"]},
-            filters: {'oldIE': false},
+            autoprefixer: { 'browsers': ["> 1%", "last 2 versions"] },
+            filters: { 'oldIE': false },
             opacity: true,
             pseudoElements: true,
             minifier: false
@@ -13,8 +13,8 @@ module.exports = {
     },
     dev: {
         options: {
-            autoprefixer: {'browsers': ["> 1%", "last 2 versions"]},
-            filters: {'oldIE': false},
+            autoprefixer: { 'browsers': ["> 1%", "last 2 versions"] },
+            filters: { 'oldIE': false },
             opacity: true,
             pseudoElements: true,
             minifier: false
@@ -25,14 +25,16 @@ module.exports = {
     },
     'prod-min': {
         options: {
-            autoprefixer: {'browsers': ["> 1%", "last 2 versions"]},
-            filters: {'oldIE': false},
+            autoprefixer: { 'browsers': ["> 1%", "last 2 versions"] },
+            filters: { 'oldIE': false },
             opacity: true,
             pseudoElements: true,
-            minifier: {preserveHacks: true, removeAllComments: true}
+            minifier: { preserveHacks: true, removeAllComments: true }
         },
         files: {
             'dist/css/material-design-iconic-font.min.css': 'dist/css/material-design-iconic-font.css'
         }
     }
 };
+//# sourceMappingURL=pleeease.js.map 
+//# sourceMappingURL=pleeease.js.map

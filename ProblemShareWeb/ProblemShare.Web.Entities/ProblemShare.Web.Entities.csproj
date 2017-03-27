@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Document.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="IDbContext.cs" />
     <Compile Include="Institution.cs" />
     <Compile Include="Migrations\201612071917470_Init.cs" />
     <Compile Include="Migrations\201612071917470_Init.Designer.cs">
@@ -74,6 +76,10 @@
     <Compile Include="Migrations\201612182239594_Users.cs" />
     <Compile Include="Migrations\201612182239594_Users.Designer.cs">
       <DependentUpon>201612182239594_Users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702280449494_Files.cs" />
+    <Compile Include="Migrations\201702280449494_Files.Designer.cs">
+      <DependentUpon>201702280449494_Files.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Problem.cs" />
@@ -105,6 +111,15 @@
     <EmbeddedResource Include="Migrations\201612182239594_Users.resx">
       <DependentUpon>201612182239594_Users.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702280449494_Files.resx">
+      <DependentUpon>201702280449494_Files.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProblemShare.Web.Interface\ProblemShare.Web.Interface.csproj">
+      <Project>{F77B8B97-35CE-4F04-883F-1034E447E5D5}</Project>
+      <Name>ProblemShare.Web.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

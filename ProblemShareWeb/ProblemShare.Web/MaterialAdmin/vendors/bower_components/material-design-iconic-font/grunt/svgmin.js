@@ -6,11 +6,13 @@ module.exports = {
             ]
         },
         files: [{
-            expand: true,    // Enable dynamic expansion.
-            cwd: 'svg/2.1',  // Src matches are relative to this path.
-            src: ['*.svg'],  // Actual pattern(s) to match.
-            dest: 'svg/new', // Destination path prefix.
-            ext: '.svg'      // Dest filepaths will have this extension.
-        }]
+                expand: true,
+                cwd: 'svg/2.1',
+                src: ['*.svg'],
+                dest: 'svg/new',
+                ext: '.svg' // Dest filepaths will have this extension.
+            }]
     }
 };
+//# sourceMappingURL=svgmin.js.map 
+//# sourceMappingURL=svgmin.js.map

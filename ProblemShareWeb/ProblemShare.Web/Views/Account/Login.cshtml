@@ -12,13 +12,15 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 <div class="fg-line">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email"})
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
                 </div>
+                @Html.ValidationMessageFor(model => model.Email, "The email address supplied is not valid", new { @class = "help-block" })
             </div>
             <div class="form-group">
                 <div class="fg-line">
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
                 </div>
+                @Html.ValidationMessageFor(model => model.Password, "Password is invalid", new { @class = "help-block" })
             </div>
             <div class="checkbox">
                 <label>
@@ -29,6 +31,11 @@
             </div>
             <button type="submit" class="btn btn-login btn-success"><i class="zmdi zmdi-arrow-forward"></i></button>
         }
+        @*<div class="preloader pl-xxl">
+            <svg class="pl-circular" viewBox="25 25 50 50">
+                <circle class="plc-path" cx="50" cy="50" r="20" />
+            </svg>
+        </div>*@
     </div>
     @*<div class="lcb-navigation">
         <a href="" data-ma-action="login-switch" data-ma-block="#l-register"><i class="zmdi zmdi-plus"></i> <span>Register</span></a>
@@ -39,26 +46,30 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             function handleResult(data) {
                 if (data) {
                     switch (data.result) {
-                        case 0: // Success
-                            if (data.redirectUrl)
-                                window.location.assign(data.redirectUrl);
-                            else
-                                window.location.assign("/");
-                            break;
-                        case 1: // Failure
-                            break;
-                        case 2: // Error
-                        default:
-                            break;
+                    case 0: // Success
+                        if (data.redirectUrl)
+                            window.location.assign(data.redirectUrl);
+                        else
+                            window.location.assign("/");
+                        break;
+                    case 1: // Failure
+                    case 2: // Error
+                        swal({
+                            title: "Unable to Log In",
+                            text: data.message
+                        });
+                        break;
+                    default:
+                        break;
                     }
                 }
             }
 
-            $('form').submit(function (e) {
+            $('form').submit(function(e) {
                 e.preventDefault();
                 $.ajax({
                     url: this.action,

@@ -12,3 +12,5 @@ module.exports = {
         "scss/temp/"
     ]
 };
+//# sourceMappingURL=clean.js.map 
+//# sourceMappingURL=clean.js.map

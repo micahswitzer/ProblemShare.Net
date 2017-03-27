@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocumentViewModel.cs" />
+    <Compile Include="FileViewModel.cs" />
     <Compile Include="InstitutionViewModel.cs" />
     <Compile Include="ProblemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

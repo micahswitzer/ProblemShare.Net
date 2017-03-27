@@ -134,7 +134,7 @@ namespace ProblemShare.Web.Controllers
             {
                 case SignInStatus.Success:
                     addSessionVars();
-                    return RedirectToLocal(model.ReturnUrl);
+                    return redirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.Failure:
@@ -177,7 +177,7 @@ namespace ProblemShare.Web.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                addErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -189,7 +189,7 @@ namespace ProblemShare.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
-            if (userId == null || code == null)
+            if (userId == Guid.Empty || code == null)
             {
                 return View("Error");
             }
@@ -271,7 +271,7 @@ namespace ProblemShare.Web.Controllers
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            AddErrors(result);
+            addErrors(result);
             return View();
         }
 
@@ -346,7 +346,7 @@ namespace ProblemShare.Web.Controllers
             {
                 case SignInStatus.Success:
                     addSessionVars();
-                    return RedirectToLocal(returnUrl);
+                    return redirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -389,14 +389,22 @@ namespace ProblemShare.Web.Controllers
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         addSessionVars();
-                        return RedirectToLocal(returnUrl);
+                        return redirectToLocal(returnUrl);
                     }
                 }
-                AddErrors(result);
+                addErrors(result);
             }
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult LogOff(bool nothing = false)
+        {
+            removeSessionVars();
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
         }
 
         //
@@ -466,7 +474,7 @@ namespace ProblemShare.Web.Controllers
             }
         }
 
-        private void AddErrors(IdentityResult result)
+        private void addErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
@@ -474,7 +482,7 @@ namespace ProblemShare.Web.Controllers
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
+        private ActionResult redirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
             {

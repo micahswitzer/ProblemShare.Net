@@ -30,5 +30,8 @@ namespace ProblemShare.Web.Entities
         public Guid InstitutionId { get; set; }
         [ForeignKey("InstitutionId")]
         public virtual Institution Institution { get; set; }
+        public Guid FileId { get; set; }
+        [ForeignKey("FileId")]
+        public virtual File ProfilePicture { get; set; }
     }
 }

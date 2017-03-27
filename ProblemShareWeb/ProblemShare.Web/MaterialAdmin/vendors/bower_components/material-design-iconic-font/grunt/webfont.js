@@ -9,13 +9,13 @@ module.exports = {
             autoHint: false,
             syntax: 'bootstrap',
             stylesheet: 'less',
-            centerHorizontally : true,
+            centerHorizontally: true,
             normalize: true,
             template: 'grunt/templates/glyphs.css',
             destHtml: 'dist',
             htmlDemoTemplate: 'grunt/templates/glyphs.html',
             templateOptions: {
-                baseClass:   'zmdi',
+                baseClass: 'zmdi',
                 classPrefix: 'zmdi-',
                 mixinPrefix: 'zmdi-'
             }
@@ -32,16 +32,18 @@ module.exports = {
             syntax: 'bootstrap',
             styles: 'icon',
             stylesheet: 'less',
-            centerHorizontally : true,
+            centerHorizontally: true,
             normalize: true,
             template: 'grunt/templates/glyphs.css',
             destHtml: 'test',
             htmlDemoTemplate: 'grunt/templates/glyphs.html',
             templateOptions: {
-                baseClass:   'zmdi',
+                baseClass: 'zmdi',
                 classPrefix: 'zmdi-',
                 mixinPrefix: 'zmdi-'
             }
         }
     }
 };
+//# sourceMappingURL=webfont.js.map 
+//# sourceMappingURL=webfont.js.map

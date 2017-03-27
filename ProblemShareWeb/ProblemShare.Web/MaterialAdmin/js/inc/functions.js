@@ -1,25 +1,22 @@
 /*----------------------------------------------------------
     Detect Mobile Browser
 -----------------------------------------------------------*/
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-   $('html').addClass('ismobile');
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    $('html').addClass('ismobile');
 }
-
 $(window).load(function () {
     /*----------------------------------------------------------
         Page Loader
      -----------------------------------------------------------*/
-    if(!$('html').hasClass('ismobile')) {
-        if($('.page-loader')[0]) {
-            setTimeout (function () {
+    if (!$('html').hasClass('ismobile')) {
+        if ($('.page-loader')[0]) {
+            setTimeout(function () {
                 $('.page-loader').fadeOut();
             }, 500);
-
         }
     }
-})
-
-$(document).ready(function(){
+});
+$(document).ready(function () {
     /*----------------------------------------------------------
         Scrollbar
     -----------------------------------------------------------*/
@@ -27,7 +24,7 @@ $(document).ready(function(){
         $(selector).mCustomScrollbar({
             theme: theme,
             scrollInertia: 100,
-            axis:'yx',
+            axis: 'yx',
             mouseWheel: {
                 enable: true,
                 axis: mousewheelaxis,
@@ -35,28 +32,23 @@ $(document).ready(function(){
             }
         });
     }
-
     if (!$('html').hasClass('ismobile')) {
         //On Custom Class
         if ($('.c-overflow')[0]) {
             scrollBar('.c-overflow', 'minimal-dark', 'y');
         }
     }
-
-
     /*----------------------------------------------------------
         Text Field
     -----------------------------------------------------------*/
     //Add blue animated border and remove with condition when focus and blur
-    if($('.fg-line')[0]) {
-        $('body').on('focus', '.fg-line .form-control', function(){
+    if ($('.fg-line')[0]) {
+        $('body').on('focus', '.fg-line .form-control', function () {
             $(this).closest('.fg-line').addClass('fg-toggled');
-        })
-
-        $('body').on('blur', '.form-control', function(){
+        });
+        $('body').on('blur', '.form-control', function () {
             var p = $(this).closest('.form-group, .input-group');
             var i = p.find('.form-control').val();
-
             if (p.hasClass('fg-float')) {
                 if (i.length == 0) {
                     $(this).closest('.fg-line').removeClass('fg-toggled');
@@ -67,35 +59,29 @@ $(document).ready(function(){
             }
         });
     }
-
     //Add blue border for pre-valued fg-flot text feilds
-    if($('.fg-float')[0]) {
-        $('.fg-float .form-control').each(function(){
+    if ($('.fg-float')[0]) {
+        $('.fg-float .form-control').each(function () {
             var i = $(this).val();
-
             if (!i.length == 0) {
                 $(this).closest('.fg-line').addClass('fg-toggled');
             }
-
         });
     }
-
-
     /*-----------------------------------------------------------
         Waves
     -----------------------------------------------------------*/
-    (function(){
-         Waves.attach('.btn');
-         Waves.attach('.btn-icon, .btn-float', ['waves-circle', 'waves-float']);
+    (function () {
+        Waves.attach('.btn');
+        Waves.attach('.btn-icon, .btn-float', ['waves-circle', 'waves-float']);
         Waves.init();
     })();
-
-
     /*-----------------------------------------------------------
         Link prevent
     -----------------------------------------------------------*/
-    $('body').on('click', '.a-prevent', function(e){
+    $('body').on('click', '.a-prevent', function (e) {
         e.preventDefault();
     });
-
 });
+//# sourceMappingURL=functions.js.map 
+//# sourceMappingURL=functions.js.map

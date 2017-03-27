@@ -1,8 +1,6 @@
 var fs = require('fs');
-
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     grunt.initConfig({
-
         less: {
             build: {
                 options: {},
@@ -12,7 +10,7 @@ module.exports = function(grunt) {
             },
             minified: {
                 options: {
-                    cleancss:true
+                    cleancss: true
                 },
                 files: {
                     'dist/waves.min.css': 'src/less/waves.less'
@@ -22,9 +20,9 @@ module.exports = function(grunt) {
             // have the same minification for comparision
             test: {
                 options: {
-                    cleancss:true,
+                    cleancss: true,
                     cleancssOptions: {
-                        keepSpecialComments:'0'
+                        keepSpecialComments: '0'
                     }
                 },
                 files: {
@@ -35,24 +33,20 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
         jshint: {
-            
             files: [
-                'gruntfile.js', 
+                'gruntfile.js',
                 'src/js/*.js',
             ],
-            
             options: {
                 globals: {
                     console: true
                 }
             }
         },
-   
         uglify: {
             options: {
-                mangle: true,  // false when debugging
+                mangle: true,
                 compress: {
                     sequences: true,
                     dead_code: true,
@@ -73,56 +67,50 @@ module.exports = function(grunt) {
                 }
             }
         },
-
         // Copy to dist
         copy: {
-			js: {
+            js: {
                 expand: true,
                 cwd: 'src/js',
-				src: 'waves.js',
-				dest: 'dist/'
-			},
+                src: 'waves.js',
+                dest: 'dist/'
+            },
             docs: {
                 expand: true,
                 cwd: 'dist',
                 src: ['waves.min.css', 'waves.min.js'],
                 dest: 'docs/static'
             }
-		},
-        
+        },
         //convert less to stylus
         execute: {
             less2stylus: {
-                call: function(grunt, options, async) {
+                call: function (grunt, options, async) {
                     var done = async();
                     var exec = require('child_process').exec;
                     exec('cd node_modules/less2stylus && node ./less2stylus ../../src/less/waves.less', function (error, stdout, stderr) {
                         grunt.log.writeln('Executing less2styus...');
-
                         if (error) {
                             grunt.log.writeln('Error! ' + error);
                         }
-
                         var fs = require('fs');
-                        fs.writeFile("src/stylus/waves.styl", stdout, function(err) {
-                            if(err) {
+                        fs.writeFile("src/stylus/waves.styl", stdout, function (err) {
+                            if (err) {
                                 grunt.log.writeln(err);
-                            } else {
+                            }
+                            else {
                                 grunt.log.writeln("Stylus file was saved!");
                             }
-
                             done(); // let grunt resume
                         });
                     });
                 }
             },
-
             less2scss: {
                 //FUTURE: Put less2scss as it's own script
-                call: function(grunt, options, async) {
+                call: function (grunt, options, async) {
                     var done = async();
-                    var text = fs.readFileSync('src/less/waves.less', {encoding:'utf8'});
-
+                    var text = fs.readFileSync('src/less/waves.less', { encoding: 'utf8' });
                     //replace @ with $
                     text = text.replace(/@(?!import|media|keyframes|-)/g, '$');
                     //replace mixins
@@ -132,51 +120,41 @@ module.exports = function(grunt) {
                     //replace string literals
                     //eg. ~'!important' -> #{"!important"}
                     text = text.replace(/~(?:\"|\')(.*)(?:\"|\')/g, '#{"$1"}');
-
                     //NOTE: for true less->scss transpiling we'd need to replace spin to adjust-hue (not needed but anyway)
-
                     fs.writeFileSync('src/scss/waves.scss', text);
-
                     done();
                 }
             },
-            
             test: {
-                call: function(grunt, options, async) {
+                call: function (grunt, options, async) {
                     var done = async();
-                    var lessTest = fs.readFileSync('tests/less/waves.min.css', {encoding:'utf8'});
-                    var sassTest = fs.readFileSync('tests/sass/waves.min.css', {encoding:'utf8'});
-                    var scssTest = fs.readFileSync('tests/scss/waves.min.css', {encoding:'utf8'});
-                    var stylusTest = fs.readFileSync('tests/stylus/waves.min.css', {encoding:'utf8'});
-                    
+                    var lessTest = fs.readFileSync('tests/less/waves.min.css', { encoding: 'utf8' });
+                    var sassTest = fs.readFileSync('tests/sass/waves.min.css', { encoding: 'utf8' });
+                    var scssTest = fs.readFileSync('tests/scss/waves.min.css', { encoding: 'utf8' });
+                    var stylusTest = fs.readFileSync('tests/stylus/waves.min.css', { encoding: 'utf8' });
                     var failure = false;
                     if (lessTest != sassTest) {
                         grunt.log.writeln('ERROR: sass failed test.');
                         failure = true;
                     }
-                    
                     if (lessTest != scssTest) {
                         grunt.log.writeln('ERROR: scss failed test.');
                         failure = true;
                     }
-                    
                     if (lessTest != stylusTest) {
                         grunt.log.writeln('ERROR: stylus failed test.');
                         failure = true;
                     }
-                    
                     if (sassTest != scssTest) {
                         grunt.log.writeln('WARNING: sass files aren\'t equal?');
                         failure = true;
                     }
-                    
-                    if (!failure) grunt.log.writeln('PASS: conversions generated same CSS');
-                    
+                    if (!failure)
+                        grunt.log.writeln('PASS: conversions generated same CSS');
                     done();
                 }
             }
         },
-
         'sass-convert': {
             options: {
                 from: 'scss',
@@ -189,19 +167,17 @@ module.exports = function(grunt) {
                 dest: 'src/sass'
             }
         },
-        
         sass: {
             test: {
                 files: [{
-                    expand: true,
-                    cwd: 'src',
-                    src: ['**/*.sass', '**/*.scss'],
-                    dest: 'tests/',
-                    ext: '.css'
-                }]
+                        expand: true,
+                        cwd: 'src',
+                        src: ['**/*.sass', '**/*.scss'],
+                        dest: 'tests/',
+                        ext: '.css'
+                    }]
             }
         },
-        
         stylus: {
             test: {
                 files: {
@@ -209,14 +185,12 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
         clean: {
             test: ['tests/*']
         },
-
         watch: {
             script: {
-               options: {
+                options: {
                     spawn: false,
                     event: ['added', 'deleted', 'changed']
                 },
@@ -228,7 +202,6 @@ module.exports = function(grunt) {
             }
         }
     });
-    
     // Load module
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-less');
@@ -241,23 +214,23 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-execute');
     grunt.loadNpmTasks('grunt-sass-convert');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    
     // Create grunt task
     grunt.registerTask('build', [
-        'less:build', 
-        'less:minified', 
-        'jshint', 
-        'uglify', 
-        'copy', 
-        'execute:less2stylus', 
-        'execute:less2scss', 
-        'sass-convert', 
-        'sass:test', 
-        'stylus:test', 
-        'less:test', 
+        'less:build',
+        'less:minified',
+        'jshint',
+        'uglify',
+        'copy',
+        'execute:less2stylus',
+        'execute:less2scss',
+        'sass-convert',
+        'sass:test',
+        'stylus:test',
+        'less:test',
         'execute:test',
         'clean:test'
     ]);
-    
     grunt.registerTask('default', ['build', 'watch']);
 };
+//# sourceMappingURL=Gruntfile.js.map 
+//# sourceMappingURL=Gruntfile.js.map

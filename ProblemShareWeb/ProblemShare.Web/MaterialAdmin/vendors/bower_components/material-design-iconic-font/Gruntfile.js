@@ -1,7 +1,5 @@
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
     require('time-grunt')(grunt);
-
     require('load-grunt-config')(grunt, {
         jitGrunt: {
             staticMappings: {
@@ -11,3 +9,5 @@ module.exports = function(grunt) {
         }
     });
 };
+//# sourceMappingURL=Gruntfile.js.map 
+//# sourceMappingURL=Gruntfile.js.map

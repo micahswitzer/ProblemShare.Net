@@ -6,23 +6,21 @@
  * Maintained by https://github/tombigel
  * Original developer https://github.com/yonran
  */
-
 //AMD and CommonJS initialization copied from https://github.com/zohararad/audio5js
 (function (root, ns, factory) {
     "use strict";
-
-    if (typeof (module) !== 'undefined' && module.exports) { // CommonJS
+    if (typeof (module) !== 'undefined' && module.exports) {
         module.exports = factory(ns, root);
-    } else if (typeof (define) === 'function' && define.amd) { // AMD
+    }
+    else if (typeof (define) === 'function' && define.amd) {
         define(function () {
             return factory(ns, root);
         });
-    } else {
+    }
+    else {
         root[ns] = factory(ns, root);
     }
-
 }(window, 'detectZoom', function () {
-
     /**
      * Use devicePixelRatio if supported by the browser
      * @return {Number}
@@ -31,7 +29,6 @@
     var devicePixelRatio = function () {
         return window.devicePixelRatio || 1;
     };
-
     /**
      * Fallback function to set default values
      * @return {Object}
@@ -56,7 +53,6 @@
             devicePxPerCssPx: zoom * devicePixelRatio()
         };
     };
-
     /**
      * For IE10 we need to change our technique again...
      * thanks https://github.com/stefanvanburen
@@ -70,7 +66,6 @@
             devicePxPerCssPx: zoom * devicePixelRatio()
         };
     };
-
     /**
      * Mobile WebKit
      * the trick: window.innerWIdth is in CSS pixels, while
@@ -87,7 +82,6 @@
             devicePxPerCssPx: zoom * devicePixelRatio()
         };
     };
-
     /**
      * Desktop Webkit
      * the trick: an element's clientHeight is in CSS pixels, while you can
@@ -108,11 +102,9 @@
         var important = function (str) {
             return str.replace(/;/g, " !important;");
         };
-
         var div = document.createElement('div');
         div.innerHTML = "1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0";
         div.setAttribute('style', important('font: 100px/1em sans-serif; -webkit-text-size-adjust: none; text-size-adjust: none; height: auto; width: 1em; padding: 0; overflow: visible;'));
-
         // The container exists so that the div will be laid out in its own flow
         // while not impacting the layout, viewport size, or display of the
         // webpage as a whole.
@@ -121,18 +113,15 @@
         var container = document.createElement('div');
         container.setAttribute('style', important('width:0; height:0; overflow:hidden; visibility:hidden; position: absolute;'));
         container.appendChild(div);
-
         document.body.appendChild(container);
         var zoom = 1000 / div.clientHeight;
         zoom = Math.round(zoom * 100) / 100;
         document.body.removeChild(container);
-
-        return{
+        return {
             zoom: zoom,
             devicePxPerCssPx: zoom * devicePixelRatio()
         };
     };
-
     /**
      * no real trick; device-pixel-ratio is the ratio of device dpi / css dpi.
      * (Note that this is a different interpretation than Webkit's device
@@ -151,7 +140,6 @@
             devicePxPerCssPx: zoom
         };
     };
-
     /**
      * Firefox 18.x
      * Mozilla added support for devicePixelRatio to Firefox 18,
@@ -167,7 +155,6 @@
             devicePxPerCssPx: devicePixelRatio()
         };
     };
-
     /**
      * works starting Opera 11.11
      * the trick: outerWidth is the viewport width including scrollbars in
@@ -184,7 +171,6 @@
             devicePxPerCssPx: zoom * devicePixelRatio()
         };
     };
-
     /**
      * Use a binary search through media queries to find zoom level in Firefox
      * @param property
@@ -200,21 +186,20 @@
         var head, style, div;
         if (window.matchMedia) {
             matchMedia = window.matchMedia;
-        } else {
+        }
+        else {
             head = document.getElementsByTagName('head')[0];
             style = document.createElement('style');
             head.appendChild(style);
-
             div = document.createElement('div');
             div.className = 'mediaQueryBinarySearch';
             div.style.display = 'none';
             document.body.appendChild(div);
-
             matchMedia = function (query) {
                 style.sheet.insertRule('@media ' + query + '{.mediaQueryBinarySearch ' + '{text-decoration: underline} }', 0);
                 var matched = getComputedStyle(div, null).textDecoration == 'underline';
                 style.sheet.deleteRule(0);
-                return {matches: matched};
+                return { matches: matched };
             };
         }
         var ratio = binarySearch(a, b, maxIter);
@@ -223,7 +208,6 @@
             document.body.removeChild(div);
         }
         return ratio;
-
         function binarySearch(a, b, maxIter) {
             var mid = (a + b) / 2;
             if (maxIter <= 0 || b - a < epsilon) {
@@ -232,12 +216,12 @@
             var query = "(" + property + ":" + mid + unit + ")";
             if (matchMedia(query).matches) {
                 return binarySearch(mid, b, maxIter - 1);
-            } else {
+            }
+            else {
                 return binarySearch(a, mid, maxIter - 1);
             }
         }
     };
-
     /**
      * Generate detection function
      * @private
@@ -248,38 +232,27 @@
         if (!isNaN(screen.logicalXDPI) && !isNaN(screen.systemXDPI)) {
             func = ie8;
         }
-        // IE10+ / Touch
         else if (window.navigator.msMaxTouchPoints) {
             func = ie10;
         }
-        //Mobile Webkit
         else if ('orientation' in window && typeof document.body.style.webkitMarquee === 'string') {
             func = webkitMobile;
         }
-        //WebKit
         else if (typeof document.body.style.webkitMarquee === 'string') {
             func = webkit;
         }
-        //Opera
         else if (navigator.userAgent.indexOf('Opera') >= 0) {
             func = opera11;
         }
-        //Last one is Firefox
-        //FF 18.x
         else if (window.devicePixelRatio) {
             func = firefox18;
         }
-        //FF 4.0 - 17.x
         else if (firefox4().zoom > 0.001) {
             func = firefox4;
         }
-
         return func;
     }());
-
-
     return ({
-
         /**
          * Ratios.zoom shorthand
          * @return {Number} Zoom level
@@ -287,7 +260,6 @@
         zoom: function () {
             return detectFunction().zoom;
         },
-
         /**
          * Ratios.devicePxPerCssPx shorthand
          * @return {Number} devicePxPerCssPx level
@@ -297,3 +269,5 @@
         }
     });
 }));
+//# sourceMappingURL=detect-zoom.js.map 
+//# sourceMappingURL=detect-zoom.js.map

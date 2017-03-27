@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ProblemShare.Web.Business
 {
-    public class UserBO : IUserBO
+    public class UserBO : BO, IUserBO
     {
         public Guid? GetInstitutionIdForUser(Guid userId)
         {
-            using (var db = new PSContext())
+            using (var db = Context)
             {
                 return db.Users.Where(x => x.UserId == userId).Select(x => (Guid?)x.InstitutionId).FirstOrDefault();
             }
@@ -20,7 +20,7 @@ namespace ProblemShare.Web.Business
 
         public Guid? GetUserIdForUsername(string userName)
         {
-            using (var db = new PSContext())
+            using (var db = Context)
             {
                 return db.Users.Where(x => x.UserName == userName).Select(x => (Guid?)x.UserId).FirstOrDefault();
             }

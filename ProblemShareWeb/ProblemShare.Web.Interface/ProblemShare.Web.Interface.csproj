@@ -44,6 +44,9 @@
     <Compile Include="IBusinessObject.cs" />
     <Compile Include="ICollectionBO.cs" />
     <Compile Include="IDocumentBO.cs" />
+    <Compile Include="IFileBO.cs" />
+    <Compile Include="IFileManagerBO.cs" />
+    <Compile Include="IInstitutionBO.cs" />
     <Compile Include="IProblemBO.cs" />
     <Compile Include="ITestBO.cs" />
     <Compile Include="IUserBO.cs" />

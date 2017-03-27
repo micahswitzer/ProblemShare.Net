@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Document Viewer";
+}
+
+@using (Html.Card())
+{
+    <h1>@ViewBag.Title</h1>
+    <br />
+    <label id="uploadBtn" class="btn btn-primary" data-upload-url="/Documents/Upload/" data-upload-success="fileUploadSuccess">
+        Upload File&nbsp;<i class="glyphicon glyphicon-cloud-upload"></i>
+        <input id="fileUploadBox" type="file" class="hidden"/>
+    </label>
+}
+
+@using (Html.Card())
+{
+    <iframe src="~/Content/Documents/TestDoc01.pdf" style="width: 100%; height: 700px; border: none;"></iframe>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function fileUploadSuccess(res) {
+            alert(res);
+        }
+    </script>
+}

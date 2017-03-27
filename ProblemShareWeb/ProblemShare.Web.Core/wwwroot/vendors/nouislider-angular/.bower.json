@@ -1,0 +1,39 @@
+{
+  "name": "nouislider-angular",
+  "main": "nouislider.js",
+  "homepage": "https://github.com/Yankovsky/nouislider-angular#readme",
+  "authors": [
+    "Yankovsky <YankovskyAndrey@gmail.com>"
+  ],
+  "description": "Angular wrapper for nouislider",
+  "keywords": [
+    "nouislider",
+    "slider",
+    "angular",
+    "angularjs"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/*",
+    "!nouislider.js",
+    "!nouislider.min.js"
+  ],
+  "dependencies": {
+    "nouislider": "~8.5.1",
+    "angular": "~1.4.11"
+  },
+  "devDependencies": {
+    "angular-route": "~1.4.11"
+  },
+  "version": "2.6.2",
+  "_release": "2.6.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.6.2",
+    "commit": "63ae5ace84eab9c33aa45ab2901ab45b1a0b18de"
+  },
+  "_source": "https://github.com/Yankovsky/nouislider-angular.git",
+  "_target": "v2.6.2",
+  "_originalSource": "nouislider-angular",
+  "_direct": true
+}
